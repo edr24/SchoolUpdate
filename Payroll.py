@@ -20,11 +20,11 @@ NetPay.set('0.0')
 def CalcPay():
 
     Gross = float(GrossPay.get())
-    Tax.set(Gross * 0.2)
-    NatIns.set(Gross * 0.14)
-    Pension.set(Gross * 0.08)
-    Deducts.set(Gross * 0.2 + Gross * 0.14 + Gross * 0.08)
-    NetPay.set(Gross - (Gross * 0.2 + Gross * 0.14 + Gross * 0.08))
+    Tax.set(round(Gross * 0.2, 2))
+    NatIns.set(round(Gross * 0.14, 2))
+    Pension.set(round(Gross * 0.08, 2))
+    Deducts.set(round(Gross * 0.2 + Gross * 0.14 + Gross * 0.08, 2))
+    NetPay.set(round(Gross - (Gross * 0.2 + Gross * 0.14 + Gross * 0.08), 2))
         
    
 GrossPayLabel=Label(PayrollWin, text="Gross Pay").grid(row=3, column=0, sticky=W)
