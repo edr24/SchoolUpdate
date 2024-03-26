@@ -1,81 +1,62 @@
 from tkinter import *
 from tkinter import messagebox
-    
-AddPupilWin=Tk()
-AddPupilWin.title("Add Pupil")
-AddPupilWin.geometry("300x300")
 
+# Creating the main application window
+add_pupil_win = Tk()
+add_pupil_win.title("Add Pupil")
+add_pupil_win.geometry("300x300")
 
+# Function to create and layout a label and entry, returning the entry's StringVar
+def create_label_entry(parent, label_text, row):
+    Label(parent, text=label_text).grid(row=row, column=0, sticky=W)
+    var = StringVar()
+    entry = Entry(parent, textvariable=var)
+    entry.grid(row=row, column=1, sticky=W)
+    return var
 
-
-def SavePupil() :
-
-    PupilIDSave = PupilIDVar.get()
-    if PupilIDSave.strip() == "":
-        messagebox.showinfo("Error","Blank username and password")
-    else:
-       PupilIDSave = PupilIDSave.ljust(50)
-   
-       FirstnameSave = FirstnameVar.get()
-       if any(char.isdigit() for char in FirstnameSave):
-            FirstnameSave = FirstnameSave.ljust(50)
-            messagebox.showinfo("Error","Number in Pupil Name")
-       else:
-    
-            SurnameSave = SurnameVar.get()
-            SurnameSave = SurnameSave.ljust(50)
-        
-            FormClassSave = FormClassVar.get()
-            FormClassSave = FormClassSave.ljust(50)
-        
-            DoBSave = DoBVar.get()
-            DoBSave = DoBSave.ljust(50)
-            
-        
-            fileObject = open("PupilDetails.txt","a")
-            
-            fileObject.write(PupilIDSave + FirstnameSave + SurnameSave + FormClassSave + DoBSave + "\n")
-            fileObject.close()
-            
-            messagebox.showinfo("Confirmation","Pupil details successfully saved")
-
-
-
-frame1=Frame(AddPupilWin)
+# Correct placement: Define frame1 before creating label and entry widgets
+frame1 = Frame(add_pupil_win)
 frame1.pack()
 
-   
-Label(frame1, text="PupilID").grid(row=3, column=0, sticky=W)
-PupilIDVar=StringVar()
-PupilIDVar= Entry(frame1, textvariable=PupilIDVar)
-PupilIDVar.grid(row=3,column=1,sticky=W)
+# Now we use frame1 properly for label and entry creation
+pupil_id_var = create_label_entry(frame1, "PupilID", 0)
+firstname_var = create_label_entry(frame1, "Firstname", 1)
+surname_var = create_label_entry(frame1, "Surname", 2)
+form_class_var = create_label_entry(frame1, "Form Class", 3)
+dob_var = create_label_entry(frame1, "DoB", 4)
 
-Label(frame1, text="Firstname").grid(row=4, column=0, sticky=W)
-FirstnameVar=StringVar()
-FirstnameVar= Entry(frame1, textvariable=FirstnameVar)
-FirstnameVar.grid(row=4,column=1,sticky=W)
+# Save pupil function with improved validation and file handling
+def save_pupil():
+    pupil_id = pupil_id_var.get().strip()
+    firstname = firstname_var.get().strip()
+    surname = surname_var.get().strip()
+    form_class = form_class_var.get().strip()
+    dob = dob_var.get().strip()
 
-Label(frame1, text="Surname").grid(row=5, column=0, sticky=W)
-SurnameVar=StringVar()
-SurnameVar= Entry(frame1, textvariable=SurnameVar)
-SurnameVar.grid(row=5,column=1,sticky=W)
+    # Validate pupil ID is not empty
+    if not pupil_id:
+        messagebox.showinfo("Error", "Pupil ID cannot be blank")
+        return
 
-Label(frame1, text="Form Class").grid(row=6, column=0, sticky=W)
-FormClassVar=StringVar()
-FormClassVar= Entry(frame1, textvariable=FormClassVar)
-FormClassVar.grid(row=6,column=1,sticky=W)
+    # Validate first name does not contain digits
+    if any(char.isdigit() for char in firstname):
+        messagebox.showinfo("Error", "First name cannot contain numbers")
+        return
 
-Label(frame1, text="DoB").grid(row=7, column=0, sticky=W)
-DoBVar=StringVar()
-DoBVar= Entry(frame1, textvariable=DoBVar)
-DoBVar.grid(row=7,column=1,sticky=W)
+    # Justify and concatenate pupil details
+    details = [pupil_id.ljust(50), firstname.ljust(50), surname.ljust(50), 
+               form_class.ljust(50), dob.ljust(50)]
 
-frame2 = Frame(AddPupilWin)
-frame2.pack()
-b1= Button(frame2, text=" Back ", command=AddPupilWin.destroy)
-b2= Button(frame2, text=" Save ", command=SavePupil)
-b1.pack(side=LEFT); b2.pack(side=LEFT)
+    # Save to file
+    with open("PupilDetails.txt", "a") as file:
+        file.write("".join(details) + "\n")
+    messagebox.showinfo("Confirmation", "Pupil details successfully saved")
 
+# Layout for buttons
+buttons_frame = Frame(add_pupil_win)
+buttons_frame.pack(pady=(10, 0))  # Add some padding above the buttons frame
+Button(buttons_frame, text="Back", command=add_pupil_win.destroy).pack(side=LEFT, padx=5)
+Button(buttons_frame, text="Save", command=save_pupil).pack(side=LEFT)
 
-    
-AddPupilWin.mainloop()
+# Start the Tkinter event loop
+add_pupil_win.mainloop()

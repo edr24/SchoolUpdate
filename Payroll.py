@@ -1,54 +1,55 @@
 from tkinter import *
 
-PayrollWin = Tk()
-PayrollWin.title("Payroll")
-PayrollWin.geometry("300x500")
+# Create the main application window
+payroll_win = Tk()
+payroll_win.title("Payroll")
+payroll_win.geometry("300x500")
 
-GrossPay = DoubleVar()  # Changed to DoubleVar to handle decimal values
-Tax = DoubleVar()
-Tax.set('0.0')
-NatIns = DoubleVar()
-NatIns.set('0.0')
-Pension = DoubleVar()
-Pension.set('0.0')
-StudentLoan = DoubleVar()  # New variable for student loan deduction
-StudentLoan.set('0.0')
-Deducts = DoubleVar()
-Deducts.set('0.0')
-NetPay = DoubleVar()
-NetPay.set('0.0')
+# Initialize variables for payroll calculations
+gross_pay = DoubleVar() #Changed from IntVar to DoubleVar to accurately handle decimal values in gross pay
+tax = DoubleVar(value=0.0)
+nat_ins = DoubleVar(value=0.0)
+pension = DoubleVar(value=0.0)
+student_loan = DoubleVar(value=0.0)  # Variable for student loan deduction
+deducts = DoubleVar(value=0.0)
+net_pay = DoubleVar(value=0.0)
 
-def CalcPay():
-    Gross = float(GrossPay.get())
-    Tax.set(round(Gross * 0.22, 2))
-    NatIns.set(round(Gross * 0.085, 2))
-    Pension.set(round(Gross * 0.08, 2))
-    StudentLoan.set(round(Gross * 0.10, 2))  # Calculate student loan deduction
-    # Update deduction calculation to include student loans
-    Deducts.set(round(Gross * 0.22 + Gross * 0.085 + Gross * 0.08 + Gross * 0.10, 2))
-    # Update net pay calculation to include student loans
-    NetPay.set(round(Gross - (Gross * 0.22 + Gross * 0.085 + Gross * 0.08 + Gross * 0.10), 2))
+# Function to calculate payroll details
+def calc_pay():
+    gross = gross_pay.get()
+    tax.set(round(gross * 0.22, 2)) #changed from 20%
+    nat_ins.set(round(gross * 0.085, 2)) #changed as per task
+    pension.set(round(gross * 0.08, 2))
+    student_loan.set(round(gross * 0.10, 2))  # Calculation for student loan
+    total_deductions = sum([tax.get(), nat_ins.get(), pension.get(), student_loan.get()])
+    deducts.set(round(total_deductions, 2))
+    net_pay.set(round(gross - total_deductions, 2))
 
-GrossPayLabel = Label(PayrollWin, text="Gross Pay").grid(row=3, column=0, sticky=W)
-GrossPayEntry = Entry(PayrollWin, textvariable=GrossPay)
-GrossPayEntry.grid(row=3, column=1)
+# Creating and placing widgets in a more structured manner
+Label(payroll_win, text="Gross Pay").grid(row=0, column=0, sticky=W)
+Entry(payroll_win, textvariable=gross_pay).grid(row=0, column=1)
 
-b1 = Button(PayrollWin, text=" Calculate ", command=CalcPay).grid(row=4)
+Button(payroll_win, text="Calculate", command=calc_pay).grid(row=1, pady=5)
 
-TaxLabelText = Label(PayrollWin, text="Tax: ").grid(row=5, column=0, sticky=W)
-TaxLabelValue = Label(PayrollWin, textvariable=Tax).grid(row=5, column=1, sticky=W)
-NatInsLabelText = Label(PayrollWin, text="National Insurance: ").grid(row=6, column=0, sticky=W)
-NatInsLabelValue = Label(PayrollWin, textvariable=NatIns).grid(row=6, column=1, sticky=W)
-PensionLabeltext = Label(PayrollWin, text="Pension Contribution: ").grid(row=7, column=0, sticky=W)
-PensionLabelValue = Label(PayrollWin, textvariable=Pension).grid(row=7, column=1, sticky=W)
-# New labels for student loan
-StudentLoanLabelText = Label(PayrollWin, text="Student Loan Deduction: ").grid(row=8, column=0, sticky=W)
-StudentLoanLabelValue = Label(PayrollWin, textvariable=StudentLoan).grid(row=8, column=1, sticky=W)
-DeductsLabelText = Label(PayrollWin, text="Total Deductions: ").grid(row=9, column=0, sticky=W)
-DeductsLabelValue = Label(PayrollWin, textvariable=Deducts).grid(row=9, column=1, sticky=W)
-NetPayLabelText = Label(PayrollWin, text="Net Pay: ").grid(row=10, column=0, sticky=W)
-NetPayLabelValue = Label(PayrollWin, textvariable=NetPay).grid(row=10, column=1, sticky=W)
+Label(payroll_win, text="Tax:").grid(row=2, column=0, sticky=W)
+Label(payroll_win, textvariable=tax).grid(row=2, column=1, sticky=W)
 
-b2 = Button(PayrollWin, text=" Back ", command=PayrollWin.destroy).grid(row=11)
+Label(payroll_win, text="National Insurance:").grid(row=3, column=0, sticky=W)
+Label(payroll_win, textvariable=nat_ins).grid(row=3, column=1, sticky=W)
 
-PayrollWin.mainloop()
+Label(payroll_win, text="Pension Contribution:").grid(row=4, column=0, sticky=W)
+Label(payroll_win, textvariable=pension).grid(row=4, column=1, sticky=W)
+
+Label(payroll_win, text="Student Loan Deduction:").grid(row=5, column=0, sticky=W)
+Label(payroll_win, textvariable=student_loan).grid(row=5, column=1, sticky=W)
+
+Label(payroll_win, text="Total Deductions:").grid(row=6, column=0, sticky=W)
+Label(payroll_win, textvariable=deducts).grid(row=6, column=1, sticky=W)
+
+Label(payroll_win, text="Net Pay:").grid(row=7, column=0, sticky=W)
+Label(payroll_win, textvariable=net_pay).grid(row=7, column=1, sticky=W)
+
+Button(payroll_win, text="Back", command=payroll_win.destroy).grid(row=8, pady=5)
+
+# Running the application's main loop
+payroll_win.mainloop()
