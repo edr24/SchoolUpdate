@@ -19,14 +19,20 @@ def MainMenu():
     frame2.pack()
 
     btn3=Button(frame2,text="Add User",command=AddUser)
-    
+
     frame3=Frame(MainMenuWin)
     frame3.pack()
 
-    btn4=Button(frame3,text="Logout",command=LoginScreen)
-    btn5=Button(frame3,text="Exit",command=MainMenuWin.destroy)
+    btn6=Button(frame3,text="Add Pupil",command=AddPupil)
+    
+    frame4=Frame(MainMenuWin)
+    frame4.pack()
+
+    btn4=Button(frame4,text="Logout",command=LoginScreen)
+    btn5=Button(frame4,text="Exit",command=MainMenuWin.destroy)
             
     btn1.pack()
+    btn6.pack()
     btn2.pack()
     btn3.pack()
     btn4.pack(side=LEFT)
@@ -35,6 +41,10 @@ def MainMenu():
 def Payroll():
     
     os.system('python Payroll.py')
+
+def AddPupil():
+    
+    os.system('python Pupils.py')
     
 def AddTeacher():
 

@@ -60,7 +60,7 @@ SurnameVar=StringVar()
 SurnameVar= Entry(frame1, textvariable=SurnameVar)
 SurnameVar.grid(row=5,column=1,sticky=W)
 
-Label(frame1, text="Address").grid(row=6, column=0, sticky=W)
+Label(frame1, text="Form Class").grid(row=6, column=0, sticky=W)
 FormClassVar=StringVar()
 FormClassVar= Entry(frame1, textvariable=FormClassVar)
 FormClassVar.grid(row=6,column=1,sticky=W)
